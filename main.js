@@ -454,16 +454,16 @@ app.post('/supplier/add', (req, res) => {
 
     const existSupplierQuery = `
     select * from suppliers
-    where phone = ?
+    where phone = ? || name = ?
     `
 
-    connection.execute(existSupplierQuery, [phone], (err, result) => {
+    connection.execute(existSupplierQuery, [phone, name], (err, result) => {
         if (err) {
             console.error('error excecuting query:\n', err);
             return res.status(500).json({ success: false, message: err.sqlMessage })
         }
         if (result.length) {
-            return res.status(409).json({ success: false, message: 'phone number already exist' })
+            return res.status(409).json({ success: false, message: 'name or phone already exist' })
         }
 
         const insertQuery = `
